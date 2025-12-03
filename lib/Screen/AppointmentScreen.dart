@@ -1,0 +1,377 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class AppointmentScreen extends StatefulWidget {
+  const AppointmentScreen({super.key});
+
+  @override
+  State<AppointmentScreen> createState() => _AppointmentScreenState();
+}
+
+class _AppointmentScreenState extends State<AppointmentScreen> {
+
+  int _selectedDateIndex = 2;
+  int _selectedTimeIndex = 1;
+
+  final List<Map<String, dynamic>> _dates = [
+    {'day': '7', 'weekday': 'Sun'},
+    {'day': '8', 'weekday': 'Mon'},
+    {'day': '9', 'weekday': 'Tue'},
+    {'day': '10', 'weekday': 'Wed'},
+    {'day': '11', 'weekday': 'Thu'},
+    {'day': '12', 'weekday': 'Fri'},
+    {'day': '13', 'weekday': 'Sat'},
+  ];
+
+  final List<String> _timeSlots = [
+    '11:00 AM', '12:00 AM', '01:00 AM', '02:00 AM',
+    '03:00 AM', '04:00 AM', '05:00 AM', '06:00 AM',
+  ];
+
+  final Color _primaryPurple = const Color(0xFFA884FF);
+  final Color _statsBgColor = const Color(0xFFB599FF);
+  final Color _textDark = const Color(0xFF1F2937);
+  final Color _textLight = const Color(0xFF6B7280);
+
+  void _handleBookAppointment() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Confirm Appointment"),
+        content: Text(
+            "Booking with Dr. Maria Waston\n"
+                "Date: ${_dates[_selectedDateIndex]['weekday']} ${_dates[_selectedDateIndex]['day']} August\n"
+                "Time: ${_timeSlots[_selectedTimeIndex]}"
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Appointment Booked Successfully!")),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: _primaryPurple),
+            child: const Text("Confirm", style: TextStyle(color: Colors.white)),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {},
+        ),
+        title: Text(
+          "Appointment",
+          style: TextStyle(
+            color: _textDark,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1. Doctor Profile Section
+              Center(
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(4), // Border width
+                          decoration: BoxDecoration(
+                            color: Colors.purple.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const CircleAvatar(
+                            radius: 45,
+                            backgroundImage: NetworkImage('https://i.pravatar.cc/300?img=5'), // Placeholder image
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 5,
+                          child: Container(
+                            width: 16,
+                            height: 16,
+                            decoration: const BoxDecoration(
+                              color: Colors.greenAccent,
+                              shape: BoxShape.circle,
+                              border: Border.fromBorderSide(
+                                BorderSide(color: Colors.white, width: 2),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "Dr. Maria Waston",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: _textDark,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.favorite, color: Colors.redAccent, size: 16),
+                        const SizedBox(width: 4),
+                        Text(
+                          "Cardio Specialist",
+                          style: TextStyle(
+                            color: _textLight,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 2. Stats Card
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: _primaryPurple,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildStatItem("350+", "Patients"),
+                    _buildStatItem("15+", "Exp. years"),
+                    _buildStatItem("284+", "Reviews"),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 3. About Doctor
+              const Text(
+                "About Doctor",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Dr. Maria Waston is the top most Cardiologist specialist in Nanyang Hospital at London. She is available for private consultation.",
+                style: TextStyle(color: _textLight, height: 1.5),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 4. Schedules
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Schedules",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "August",
+                        style: TextStyle(color: _textLight, fontSize: 14),
+                      ),
+                      Icon(Icons.chevron_right, color: _textLight, size: 20),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 80,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _dates.length,
+                  itemBuilder: (context, index) {
+                    final isSelected = index == _selectedDateIndex;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedDateIndex = index;
+                        });
+                      },
+                      child: Container(
+                        width: 70,
+                        margin: const EdgeInsets.only(right: 12),
+                        decoration: BoxDecoration(
+                          color: isSelected ? _primaryPurple : Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isSelected ? Colors.transparent : Colors.grey.shade200,
+                          ),
+                          boxShadow: isSelected
+                              ? [BoxShadow(color: _primaryPurple.withOpacity(0.4), blurRadius: 8, offset: const Offset(0, 4))]
+                              : [],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              _dates[index]['day'],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: isSelected ? Colors.white : _textDark,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              _dates[index]['weekday'],
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: isSelected ? Colors.white70 : _textLight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 5. Visit Hour
+              const Text(
+                "Visit Hour",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: List.generate(_timeSlots.length, (index) {
+                  final isSelected = index == _selectedTimeIndex;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedTimeIndex = index;
+                      });
+                    },
+                    child: Container(
+                      width: (MediaQuery.of(context).size.width - 48 - 36) / 4, // Calculate width for 4 cols
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isSelected ? _primaryPurple : Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected ? Colors.transparent : Colors.grey.shade200,
+                        ),
+                        boxShadow: isSelected
+                            ? [BoxShadow(color: _primaryPurple.withOpacity(0.4), blurRadius: 4, offset: const Offset(0, 2))]
+                            : [],
+                      ),
+                      child: Center(
+                        child: Text(
+                          _timeSlots[index],
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: isSelected ? Colors.white : _textLight,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+
+              const SizedBox(height: 100), // Space for bottom button
+            ],
+          ),
+        ),
+      ),
+
+      // 6. Bottom Button (Floating style)
+      bottomSheet: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(24),
+        child: SizedBox(
+          width: double.infinity,
+          height: 56,
+          child: ElevatedButton(
+            onPressed: _handleBookAppointment,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _primaryPurple,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 0,
+            ),
+            child: const Text(
+              "Book Appointment",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper widget for the 3 stats boxes
+  Widget _buildStatItem(String count, String label) {
+    return Container(
+      width: 95,
+      height: 90,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            count,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: _primaryPurple.withOpacity(0.8), // Making text light purple
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: _textLight,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
