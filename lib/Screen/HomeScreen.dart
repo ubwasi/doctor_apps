@@ -1,4 +1,5 @@
 import 'package:doctor_apps/Theme/Theme.dart';
+import 'package:doctor_apps/Widget/TextEdtingField.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
@@ -44,8 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                    // Search Field
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -58,28 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: LightTheme.primaryColors, width: 2),
-                          ),
-                          hintText: 'Search health issue......',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          prefixIcon: Icon(Icons.search, color: Colors.grey),
-                          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                        ),
-                      ),
+                      child: TextEditingField(title: "",hintText: "search health issue..",icon: Icon(Icons.search),)
                     ),
 
                     Text(
@@ -90,8 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 15),
-
-                    // Category Chips
                     SizedBox(
                       height: 40,
                       child: ListView.builder(
