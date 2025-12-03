@@ -1,4 +1,5 @@
 import 'package:doctor_apps/Theme/Theme.dart';
+import 'package:doctor_apps/Widget/TextEdtingField.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,95 +22,120 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(left:9,right:9),
+                padding: EdgeInsets.symmetric(vertical: 30,horizontal: 15),
+                decoration: BoxDecoration(
+                  gradient:  LinearGradient(
+                    colors: [
+                      Color(0xFFB57CFF),
+                      Color(0xFF8F6BFF),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(25),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(
+                          Icons.menu_rounded,
+                          color: LightTheme.backgroundColors,
+                          size: 30,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                            "https://i.imgur.com/BoN9kdC.png",
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 25),
+
                     Text(
-                      'Welcome Back',
+                      "Welcome Back",
                       style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
                         fontSize: 16,
-                        color: Colors.grey[600],
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text(
+
+                    const Text(
                       "Let's find your\ntop doctor!",
                       style: TextStyle(
+                        color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        height: 1.3,
                       ),
                     ),
+
                     const SizedBox(height: 20),
 
-                    // Search Field
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            blurRadius: 10,
-                            spreadRadius: 2,
-                          ),
-                        ],
                       ),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: LightTheme.primaryColors, width: 2),
-                          ),
-                          hintText: 'Search health issue......',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          prefixIcon: Icon(Icons.search, color: Colors.grey),
-                          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                        ),
+                      child: TextEditingField(
+                        title: "",
+                        hintText: "Search health issue...",
+                        icon: const Icon(Icons.search),
                       ),
                     ),
-
+                    SizedBox(height: 20)
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
                       'Categories',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: LightTheme.subTitleColors,
                       ),
                     ),
                     const SizedBox(height: 15),
 
-                    // Category Chips
                     SizedBox(
-                      height: 40,
+                      height: 50,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: categories.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 7),
                             child: ChoiceChip(
                               label: Text(
                                 categories[index],
                                 style: TextStyle(
-                                  color: _selectedCategory == index ? Colors.white : Colors.black,
+                                  color: _selectedCategory == index
+                                      ? Colors.white
+                                      : Colors.black54,
                                 ),
                               ),
                               selected: _selectedCategory == index,
                               selectedColor: LightTheme.primaryColors,
                               backgroundColor: Colors.grey[200],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                               onSelected: (selected) {
                                 setState(() {
                                   _selectedCategory = index;
@@ -123,12 +149,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-
             ],
           ),
         ),
       ),
-
     );
   }
 }

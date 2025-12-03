@@ -8,28 +8,26 @@ class TextEditingField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(20),
-      child: TextField(
-        decoration: InputDecoration(
-          fillColor: LightTheme.backgroundColors,
-          filled: true,
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(14)
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(14)
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none
-          ),
-          labelText: title,
-          hintText: hintText,
-          prefixIcon: icon
+    return TextField(
+      decoration: InputDecoration(
+        fillColor: LightTheme.backgroundColors,
+        filled: true,
+        border: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(14)
         ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(14)
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide.none
+        ),
+        labelText: title,
+        hintText: hintText,
+        hintStyle: TextStyle(color: LightTheme.subTitleColors),
+        prefixIcon: icon
       ),
     );
   }
