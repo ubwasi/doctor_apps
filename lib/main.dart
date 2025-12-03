@@ -1,3 +1,4 @@
+import 'package:doctor_apps/Screen/AppointmentScreen.dart';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
       ),
-      home: HomeScreen(),
+      home: AppointmentScreen(),
     );
   }
 }
