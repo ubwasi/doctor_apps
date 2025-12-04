@@ -6,4 +6,12 @@ class LightTheme{
   static final titleColors = Color(0xFF1F2937);
   static final subTitleColors = Color(0xFF6B7280);
   static final _statsBgColor = Color(0xFFB599FF);
+  static final linnerColors = LinearGradient(
+    colors: [
+      Color(0xFFB57CFF),
+      Color(0xFF8F6BFF),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }

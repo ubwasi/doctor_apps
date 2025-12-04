@@ -27,14 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 margin: EdgeInsets.only(left:9,right:9),
                 padding: EdgeInsets.symmetric(vertical: 30,horizontal: 15),
                 decoration: BoxDecoration(
-                  gradient:  LinearGradient(
-                    colors: [
-                      Color(0xFFB57CFF),
-                      Color(0xFF8F6BFF),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  gradient:  LightTheme.linnerColors,
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Column(

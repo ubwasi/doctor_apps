@@ -34,7 +34,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
   String _getWeekday(DateTime date) {
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    // DateTime.weekday returns 1 for Mon, 7 for Sun
     return weekdays[date.weekday - 1];
   }
 
@@ -318,8 +317,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   );
                 }),
               ),
-
-              const SizedBox(height: 100), // Space for bottom button
+              const SizedBox(height: 100),
             ],
           ),
         ),
@@ -355,7 +353,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     );
   }
 
-  // Helper widget for the 3 stats boxes
   Widget _buildStatItem(String count, String label) {
     return Container(
       width: 95,
@@ -372,7 +369,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: LightTheme.primaryColors.withOpacity(0.8), // Making text light purple
+              color: LightTheme.primaryColors.withOpacity(0.8),
             ),
           ),
           const SizedBox(height: 4),
