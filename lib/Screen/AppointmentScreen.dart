@@ -1,3 +1,4 @@
+
 import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. Doctor Profile Section
               Center(
                 child: Column(
                   children: [
@@ -169,18 +169,24 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               const SizedBox(height: 24),
 
               Container(
+                width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                 decoration: BoxDecoration(
                   color: LightTheme.primaryColors,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildStatItem("350+", "Patients"),
-                    _buildStatItem("15+", "Exp. years"),
-                    _buildStatItem("284+", "Reviews"),
-                  ],
+                child: SingleChildScrollView(
+
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    spacing: 15,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildStatItem("350+", "Patients"),
+                      _buildStatItem("15+", "Exp. years"),
+                      _buildStatItem("284+", "Reviews"),
+                    ],
+                  ),
                 ),
               ),
 
