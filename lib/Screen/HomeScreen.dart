@@ -2,6 +2,8 @@ import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:doctor_apps/Widget/TextEdtingField.dart';
 import 'package:flutter/material.dart';
 
+import '../Widget/AppointmentDoctor.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -24,10 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(left:9,right:9),
-                padding: EdgeInsets.symmetric(vertical: 30,horizontal: 15),
+                margin: EdgeInsets.only(left: 9, right: 9),
+                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
                 decoration: BoxDecoration(
-                  gradient:  LightTheme.linnerColors,
+                  gradient: LightTheme.linnerColors,
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Column(
@@ -39,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Icon(
                           Icons.menu_rounded,
                           color: LightTheme.backgroundColors,
-                          size: 30,
+                          size: 35,
                         ),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(50),
@@ -87,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: const Icon(Icons.search),
                       ),
                     ),
-                    SizedBox(height: 20)
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -139,6 +141,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                     ),
+
+                    SizedBox(height: 20),
+                    AppointmentDoctor(),
                   ],
                 ),
               ),
@@ -149,3 +154,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
