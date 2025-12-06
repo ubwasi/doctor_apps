@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
       ),
-      home: AppointmentScreen(),
+      home: HomeScreen(),
     );
   }
 }
