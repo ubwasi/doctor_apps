@@ -20,7 +20,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   @override
   void initState() {
     super.initState();
-    // Generate the next 30 days starting from today
     _dates = List.generate(
         30,
             (index) => DateTime.now().add(Duration(days: index))
@@ -87,7 +86,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: Text(
           "Appointment",
