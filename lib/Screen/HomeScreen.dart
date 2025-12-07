@@ -14,6 +14,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedCategory = 0;
   final List<String> categories = ['All', 'Cardiology', 'Medicine', 'General'];
+  final List<Map<String, dynamic>> doctors = [
+    {
+      "name": "Dr. Maria Waston",
+      "sub": "Heart Surgeon, London, England",
+      "rating": 4.8,
+      "image":
+          "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=500",
+    },
+    {
+      "name": "Dr. John Smith",
+      "sub": "Cardiologist, New York",
+      "rating": 4.6,
+      "image":
+          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500",
+    },
+    {
+      "name": "Dr. Emma Brown",
+      "sub": "Medicine Specialist, Canada",
+      "rating": 4.9,
+      "image":
+          "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=500",
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(50),
                           child: Image.network(
                             "https://i.imgur.com/BoN9kdC.png",
-                            height: 40,
-                            width: 40,
+                            height: 30,
+                            width: 30,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -143,7 +166,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     SizedBox(height: 20),
-                    AppointmentDoctor(),
+                    ListView.builder(
+                      itemCount: doctors.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final doc = doctors[index];
+                        return AppointmentDoctor(
+                          name: doc["name"],
+                          subtitle: doc["sub"],
+                          rating: doc["rating"],
+                          image: doc["image"],
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -154,5 +190,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
