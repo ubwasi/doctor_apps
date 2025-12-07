@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "name": "Dr. Maria Waston",
       "sub": "Heart Surgeon, London, England",
-      "rating": 4.8,
+      "rating": 4.9,
       "image":
           "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=500",
     },

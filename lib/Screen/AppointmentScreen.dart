@@ -105,7 +105,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. Doctor Profile Section
+
               Center(
                 child: Column(
                   children: [
