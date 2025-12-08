@@ -4,7 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentScreen extends StatefulWidget {
-  const AppointmentScreen({super.key});
+  final String name;
+  final String subtitle;
+  final String image;
+
+  const AppointmentScreen({
+    super.key,
+    required this.name,
+    required this.subtitle,
+    required this.image,
+  });
 
   @override
   State<AppointmentScreen> createState() => _AppointmentScreenState();
@@ -22,17 +31,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
-    _dates = List.generate(
-      daysInMonth,
-      (index) => firstDayOfMonth.add(Duration(days: index)),
-    );
-    // Select today's date by default if it's in the list
-    final todayIndex = _dates.indexWhere(
-      (date) =>
-          date.year == now.year &&
-          date.month == now.month &&
-          date.day == now.day,
-    );
+    _dates = List.generate(daysInMonth, (index) => firstDayOfMonth.add(Duration(days: index)));
+    final todayIndex = _dates.indexWhere((date) =>
+    date.year == now.year && date.month == now.month && date.day == now.day);
     if (todayIndex != -1) {
       _selectedDateIndex = todayIndex;
     }
@@ -74,9 +75,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
   void _handleBookAppointment() {
     if (_selectedDateIndex == -1) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Please select a date.")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select a date.")),
+      );
       return;
     }
     final selectedDate = _dates[_selectedDateIndex];
@@ -85,7 +86,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       builder: (context) => AlertDialog(
         title: const Text("Confirm Appointment"),
         content: Text(
-          "Booking with Dr. Maria Waston\n"
+          "Booking with ${widget.name}\n"
           "Date: ${_getWeekday(selectedDate)} ${selectedDate.day} ${_getMonthName(selectedDate)}\n"
           "Time: ${_timeSlots[_selectedTimeIndex]}",
         ),
@@ -153,11 +154,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             color: Colors.purple.withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
-                          child: const CircleAvatar(
+                          child: CircleAvatar(
                             radius: 45,
-                            backgroundImage: NetworkImage(
-                              'https://i.pravatar.cc/300?img=5',
-                            ), // Placeholder image
+                            backgroundImage: NetworkImage(widget.image), 
                           ),
                         ),
                         Positioned(
@@ -179,7 +178,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      "Dr. Maria Waston",
+                      widget.name,
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -197,7 +196,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          "Cardio Specialist",
+                          widget.subtitle,
                           style: TextStyle(
                             color: LightTheme.titleColors,
                             fontSize: 14,
@@ -252,7 +251,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                "Dr. Maria Waston is the top most Cardiologist specialist in Nanyang Hospital at London. She is available for private consultation.",
+                "${widget.name} is the top most Cardiologist specialist in Nanyang Hospital at London. She is available for private consultation.",
                 style: TextStyle(color: LightTheme.titleColors, height: 1.5),
               ),
 

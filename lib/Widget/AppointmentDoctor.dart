@@ -87,7 +87,11 @@ class AppointmentDoctor extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return AppointmentScreen();
+                    return AppointmentScreen(
+                      name: name,
+                      subtitle: subtitle,
+                      image: image,
+                    );
                   },
                 ),
               );
