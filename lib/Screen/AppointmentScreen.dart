@@ -19,7 +19,7 @@ class AppointmentScreen extends StatefulWidget {
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
-  int _selectedDateIndex = -1; // Default to no date selected
+  int _selectedDateIndex = -1;
   int _selectedTimeIndex = 1;
 
   late List<DateTime> _dates;

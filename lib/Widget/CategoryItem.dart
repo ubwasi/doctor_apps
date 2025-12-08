@@ -29,8 +29,8 @@ class CategoryItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 70,
-            height: 70,
+            width: 50,
+            height: 50,
             decoration: BoxDecoration(
               color: isSelected ? iconColor.withOpacity(0.2) : Colors.white,
               borderRadius: BorderRadius.circular(20),

@@ -1,4 +1,5 @@
 import 'package:doctor_apps/Screen/HomeScreen.dart';
+import 'package:doctor_apps/Screen/TopDoctors.dart';
 import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: LightTheme.theme,
-      home: HomeScreen(),
+      home: TopDoctors(),
     );
   }
 }
