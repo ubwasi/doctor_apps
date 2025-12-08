@@ -1,8 +1,10 @@
 import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:doctor_apps/Widget/TextEdtingField.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import '../Widget/AppointmentDoctor.dart';
+import '../Widget/CategoryItem.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,45 +14,80 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedCategory = 0;
-  final List<String> categories = ['All', 'Cardiology', 'Medicine', 'General'];
-  final List<Map<String, dynamic>> doctors = [
+  int _selectedCategoryIndex = 0;
+  List<Map<String, dynamic>> doctors = [];
+
+  final List<Map<String, dynamic>> categories = [
     {
-      "name": "Dr. Maria Waston",
-      "sub": "Heart Surgeon, London, England",
-      "rating": 4.8,
-      "image":
-          "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=500",
+      "icon": Icons.verified_rounded,
+      "label": "All",
+      "iconColor": const Color(0xFF6CE9A6),
+      "backgroundColor": const Color(0xFFE8FDF0),
     },
     {
-      "name": "Dr. John Smith",
-      "sub": "Cardiologist, New York",
-      "rating": 4.6,
-      "image":
-          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500",
+      "icon": Icons.monitor_heart_rounded,
+      "label": "Cardiology",
+      "iconColor": const Color(0xFFFF6B6B),
+      "backgroundColor": const Color(0xFFFFF0F0),
     },
     {
-      "name": "Dr. Emma Brown",
-      "sub": "Medicine Specialist, Canada",
-      "rating": 4.9,
-      "image":
-          "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=500",
+      "icon": Icons.medication_rounded,
+      "label": "Medicine",
+      "iconColor": const Color(0xFFC77DFF),
+      "backgroundColor": const Color(0xFFF8F0FF),
+    },
+    {
+      "icon": Icons.healing_rounded,
+      "label": "General",
+      "iconColor": const Color(0xFFFF8787),
+      "backgroundColor": const Color(0xFFFFF2F2),
     },
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadDoctors();
+  }
+
+  Future<void> _loadDoctors() async {
+    final String data = await rootBundle.loadString('Services/API Services/doctorsList.json');
+    final List<dynamic> jsonData = json.decode(data);
+    if (mounted) {
+      setState(() {
+        doctors = jsonData.cast<Map<String, dynamic>>();
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> displayedDoctors;
+    final selectedCategoryLabel = categories[_selectedCategoryIndex]['label'];
+
+    if (_selectedCategoryIndex == 0) {
+      displayedDoctors = doctors;
+    } else {
+      displayedDoctors = doctors
+          .where((doctor) =>
+              (doctor['category'] as String?)
+                  ?.toLowerCase() ==
+              selectedCategoryLabel.toLowerCase())
+          .toList();
+    }
+
     return Scaffold(
       backgroundColor: LightTheme.backgroundColors,
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(top: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 width: double.infinity,
                 margin: EdgeInsets.only(left: 9, right: 9),
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 decoration: BoxDecoration(
                   gradient: LightTheme.linnerColors,
                   borderRadius: BorderRadius.circular(25),
@@ -67,11 +104,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           size: 35,
                         ),
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(20),
                           child: Image.network(
                             "https://i.imgur.com/BoN9kdC.png",
-                            height: 30,
-                            width: 30,
+                            height: 60,
+                            width: 60,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -117,65 +154,52 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.only(left: 20,top: 20,right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Categories',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: LightTheme.subTitleColors,
+                        color: LightTheme.titleColors,
                       ),
                     ),
                     const SizedBox(height: 15),
-
-                    SizedBox(
-                      height: 50,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 7),
-                            child: ChoiceChip(
-                              label: Text(
-                                categories[index],
-                                style: TextStyle(
-                                  color: _selectedCategory == index
-                                      ? Colors.white
-                                      : Colors.black54,
-                                ),
-                              ),
-                              selected: _selectedCategory == index,
-                              selectedColor: LightTheme.primaryColors,
-                              backgroundColor: Colors.grey[200],
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              onSelected: (selected) {
-                                setState(() {
-                                  _selectedCategory = index;
-                                });
-                              },
-                            ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5,bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(categories.length, (index) {
+                          final category = categories[index];
+                          return CategoryItem(
+                            icon: category["icon"],
+                            label: category["label"],
+                            iconColor: category["iconColor"],
+                            backgroundColor: category["backgroundColor"],
+                            isSelected: _selectedCategoryIndex == index,
+                            onTap: () {
+                              setState(() {
+                                _selectedCategoryIndex = index;
+                              });
+                            },
                           );
-                        },
+                        }),
                       ),
                     ),
-
                     SizedBox(height: 20),
                     ListView.builder(
-                      itemCount: doctors.length,
+                      key: ValueKey(selectedCategoryLabel),
+                      itemCount: displayedDoctors.length,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        final doc = doctors[index];
+                        final doc = displayedDoctors[index];
                         return AppointmentDoctor(
                           name: doc["name"],
                           subtitle: doc["sub"],
-                          rating: doc["rating"],
+                          rating: doc["rating"].toDouble(),
                           image: doc["image"],
                         );
                       },

@@ -1,4 +1,5 @@
 import 'package:doctor_apps/Screen/AppointmentScreen.dart';
+import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -54,12 +55,16 @@ class AppointmentDoctor extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: LightTheme.titleColors,
+                  ),
                 ),
 
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(fontSize: 12, color: LightTheme.subTitleColors),
                 ),
                 SizedBox(height: 8),
                 Row(
@@ -77,10 +82,15 @@ class AppointmentDoctor extends StatelessWidget {
           ),
 
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AppointmentScreen();
-              }));
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return AppointmentScreen();
+                  },
+                ),
+              );
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),

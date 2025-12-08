@@ -1,5 +1,5 @@
-
 import 'package:doctor_apps/Theme/Theme.dart';
+import 'package:doctor_apps/Widget/StatItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,8 +11,7 @@ class AppointmentScreen extends StatefulWidget {
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
-
-  int _selectedDateIndex = 2;
+  int _selectedDateIndex = -1; // Default to no date selected
   int _selectedTimeIndex = 1;
 
   late List<DateTime> _dates;
@@ -20,42 +19,75 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   @override
   void initState() {
     super.initState();
+    final now = DateTime.now();
+    final firstDayOfMonth = DateTime(now.year, now.month, 1);
+    final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
     _dates = List.generate(
-        30,
-            (index) => DateTime.now().add(Duration(days: index))
+      daysInMonth,
+      (index) => firstDayOfMonth.add(Duration(days: index)),
     );
+    // Select today's date by default if it's in the list
+    final todayIndex = _dates.indexWhere(
+      (date) =>
+          date.year == now.year &&
+          date.month == now.month &&
+          date.day == now.day,
+    );
+    if (todayIndex != -1) {
+      _selectedDateIndex = todayIndex;
+    }
   }
 
   final List<String> _timeSlots = [
-    '11:00 AM', '12:00 AM', '01:00 AM', '02:00 AM',
-    '03:00 AM', '04:00 AM', '05:00 AM', '06:00 AM',
+    '11:00 AM',
+    '12:00 AM',
+    '01:00 AM',
+    '02:00 AM',
+    '03:00 AM',
+    '04:00 AM',
+    '05:00 AM',
+    '06:00 AM',
   ];
-
 
   String _getWeekday(DateTime date) {
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return weekdays[date.weekday - 1];
   }
 
-
-
   String _getMonthName(DateTime date) {
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     return months[date.month - 1];
   }
 
-
   void _handleBookAppointment() {
+    if (_selectedDateIndex == -1) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please select a date.")));
+      return;
+    }
     final selectedDate = _dates[_selectedDateIndex];
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Confirm Appointment"),
         content: Text(
-            "Booking with Dr. Maria Waston""Date: ${_getWeekday(selectedDate)} ${selectedDate.day} ${_getMonthName(selectedDate)}""Time: ${_timeSlots[_selectedTimeIndex]}"
+          "Booking with Dr. Maria Waston\n"
+          "Date: ${_getWeekday(selectedDate)} ${selectedDate.day} ${_getMonthName(selectedDate)}\n"
+          "Time: ${_timeSlots[_selectedTimeIndex]}",
         ),
         actions: [
           TextButton(
@@ -66,12 +98,16 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Appointment Booked Successfully!")),
+                const SnackBar(
+                  content: Text("Appointment Booked Successfully!"),
+                ),
               );
             },
-            style: ElevatedButton.styleFrom(backgroundColor: LightTheme.primaryColors),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: LightTheme.primaryColors,
+            ),
             child: const Text("Confirm", style: TextStyle(color: Colors.white)),
-          )
+          ),
         ],
       ),
     );
@@ -119,7 +155,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           ),
                           child: const CircleAvatar(
                             radius: 45,
-                            backgroundImage: NetworkImage('https://i.pravatar.cc/300?img=5'), // Placeholder image
+                            backgroundImage: NetworkImage(
+                              'https://i.pravatar.cc/300?img=5',
+                            ), // Placeholder image
                           ),
                         ),
                         Positioned(
@@ -136,7 +174,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -152,7 +190,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.favorite, color: Colors.redAccent, size: 16),
+                        const Icon(
+                          Icons.favorite,
+                          color: Colors.redAccent,
+                          size: 16,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           "Cardio Specialist",
@@ -171,23 +213,34 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 16,
+                ),
                 decoration: BoxDecoration(
                   color: LightTheme.primaryColors,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: SingleChildScrollView(
-
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    spacing: 15,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildStatItem("350+", "Patients"),
-                      _buildStatItem("15+", "Exp. years"),
-                      _buildStatItem("284+", "Reviews"),
-                    ],
-                  ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: constraints.maxWidth,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: const [
+                            StatItem(count: '350+', label: 'Patients'),
+                            StatItem(count: '15+', label: 'Exp. years'),
+                            StatItem(count: '284+', label: 'Reviews'),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -205,7 +258,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
               const SizedBox(height: 24),
 
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -216,10 +268,17 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   Row(
                     children: [
                       Text(
-                        "August",
-                        style: TextStyle(color: LightTheme.subTitleColors, fontSize: 14),
+                        _getMonthName(DateTime.now()),
+                        style: TextStyle(
+                          color: LightTheme.subTitleColors,
+                          fontSize: 14,
+                        ),
                       ),
-                      Icon(Icons.chevron_right, color: LightTheme.subTitleColors, size: 20),
+                      Icon(
+                        Icons.chevron_right,
+                        color: LightTheme.subTitleColors,
+                        size: 20,
+                      ),
                     ],
                   ),
                 ],
@@ -242,13 +301,25 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         width: 70,
                         margin: const EdgeInsets.only(right: 12),
                         decoration: BoxDecoration(
-                          color: isSelected ? LightTheme.primaryColors : Colors.white,
+                          color: isSelected
+                              ? LightTheme.primaryColors
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: isSelected ? Colors.transparent : Colors.grey.shade200,
+                            color: isSelected
+                                ? Colors.transparent
+                                : Colors.grey.shade200,
                           ),
                           boxShadow: isSelected
-                              ? [BoxShadow(color: LightTheme.primaryColors.withOpacity(0.4), blurRadius: 8, offset: const Offset(0, 4))]
+                              ? [
+                                  BoxShadow(
+                                    color: LightTheme.primaryColors.withOpacity(
+                                      0.4,
+                                    ),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ]
                               : [],
                         ),
                         child: Column(
@@ -259,7 +330,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: isSelected ? Colors.white : LightTheme.titleColors,
+                                color: isSelected
+                                    ? Colors.white
+                                    : LightTheme.titleColors,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -267,7 +340,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               _getWeekday(_dates[index]),
                               style: TextStyle(
                                 fontSize: 14,
-                                color: isSelected ? Colors.white70 : LightTheme.subTitleColors,
+                                color: isSelected
+                                    ? Colors.white70
+                                    : LightTheme.subTitleColors,
                               ),
                             ),
                           ],
@@ -298,16 +373,30 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       });
                     },
                     child: Container(
-                      width: (MediaQuery.of(context).size.width - 48 - 36) / 4, // Calculate width for 4 cols
+                      width:
+                          (MediaQuery.of(context).size.width - 48 - 36) /
+                          4, // Calculate width for 4 cols
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: isSelected ? LightTheme.primaryColors : Colors.white,
+                        color: isSelected
+                            ? LightTheme.primaryColors
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: isSelected ? Colors.transparent : Colors.grey.shade200,
+                          color: isSelected
+                              ? Colors.transparent
+                              : Colors.grey.shade200,
                         ),
                         boxShadow: isSelected
-                            ? [BoxShadow(color: LightTheme.primaryColors.withOpacity(0.4), blurRadius: 4, offset: const Offset(0, 2))]
+                            ? [
+                                BoxShadow(
+                                  color: LightTheme.primaryColors.withOpacity(
+                                    0.4,
+                                  ),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ]
                             : [],
                       ),
                       child: Center(
@@ -316,7 +405,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: isSelected ? Colors.white : LightTheme.subTitleColors,
+                            color: isSelected
+                                ? Colors.white
+                                : LightTheme.subTitleColors,
                           ),
                         ),
                       ),
@@ -356,38 +447,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String count, String label) {
-    return Container(
-      width: 95,
-      height: 90,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            count,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: LightTheme.primaryColors.withOpacity(0.8),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: LightTheme.subTitleColors,
-            ),
-          ),
-        ],
       ),
     );
   }

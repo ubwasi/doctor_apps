@@ -1,5 +1,5 @@
-import 'package:doctor_apps/Screen/AppointmentScreen.dart';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
+import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,10 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-      ),
+      theme: LightTheme.theme,
       home: HomeScreen(),
     );
   }
 }
-
