@@ -1,6 +1,5 @@
 import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:doctor_apps/Widget/StatItem.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentScreen extends StatefulWidget {
@@ -149,7 +148,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     Stack(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(4), // Border width
+                          padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
                             color: Colors.purple.withOpacity(0.1),
                             shape: BoxShape.circle,

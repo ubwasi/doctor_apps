@@ -1,6 +1,5 @@
 import 'package:doctor_apps/Screen/AppointmentScreen.dart';
 import 'package:doctor_apps/Theme/Theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentDoctor extends StatelessWidget {
