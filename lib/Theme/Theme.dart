@@ -10,7 +10,6 @@ class LightTheme{
     colors: [
       Color(0xFFCCBBFF),
       Color(0xFFA25DFF),
-
     ],
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
