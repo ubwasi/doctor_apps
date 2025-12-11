@@ -18,7 +18,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final List<Widget> pages = [
     HomeScreen(),
     TopDoctors(),
-    ProfilePage()
+    ProfileScreen()
   ];
   @override
   Widget build(BuildContext context) {
