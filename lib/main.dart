@@ -1,3 +1,4 @@
+import 'package:doctor_apps/Screen/BottomNavbar.dart';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:doctor_apps/Screen/TopDoctors.dart';
 import 'package:doctor_apps/Theme/Theme.dart';
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: LightTheme.theme,
-      home: TopDoctors(),
+      home: BottomNavBar(),
     );
   }
 }

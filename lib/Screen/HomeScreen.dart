@@ -51,7 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadDoctors() async {
-    final String data = await rootBundle.loadString('Services/API Services/doctorsList.json');
+    final String data = await rootBundle.loadString(
+      'Services/API Services/doctorsList.json',
+    );
     final List<dynamic> jsonData = json.decode(data);
     if (mounted) {
       setState(() {
@@ -69,146 +71,144 @@ class _HomeScreenState extends State<HomeScreen> {
       displayedDoctors = doctors;
     } else {
       displayedDoctors = doctors
-          .where((doctor) =>
-              (doctor['category'] as String?)
-                  ?.toLowerCase() ==
-              selectedCategoryLabel.toLowerCase())
+          .where(
+            (doctor) =>
+                (doctor['category'] as String?)?.toLowerCase() ==
+                selectedCategoryLabel.toLowerCase(),
+          )
           .toList();
     }
 
-    return Scaffold(
-      backgroundColor: LightTheme.backgroundColors,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.only(left: 9, right: 9),
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                decoration: BoxDecoration(
-                  gradient: LightTheme.linnerColors,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(
-                          Icons.menu_rounded,
-                          color: LightTheme.backgroundColors,
-                          size: 35,
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            "https://i.imgur.com/BoN9kdC.png",
-                            height: 60,
-                            width: 60,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 25),
-
-                    Text(
-                      "Welcome Back",
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-
-                    const Text(
-                      "Let's find your\ntop doctor!",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        height: 1.3,
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: TextEditingField(
-                        title: "",
-                        hintText: "Search health issue...",
-                        icon: const Icon(Icons.search),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                  ],
-                ),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(left: 9, right: 9),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              decoration: BoxDecoration(
+                gradient: LightTheme.linnerColors,
+                borderRadius: BorderRadius.circular(25),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20,top: 20,right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Categories',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: LightTheme.titleColors,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.menu_rounded,
+                        color: LightTheme.backgroundColors,
+                        size: 35,
                       ),
-                    ),
-                    const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5,bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: List.generate(categories.length, (index) {
-                          final category = categories[index];
-                          return CategoryItem(
-                            icon: category["icon"],
-                            label: category["label"],
-                            iconColor: category["iconColor"],
-                            backgroundColor: category["backgroundColor"],
-                            isSelected: _selectedCategoryIndex == index,
-                            onTap: () {
-                              setState(() {
-                                _selectedCategoryIndex = index;
-                              });
-                            },
-                          );
-                        }),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(
+                          "https://i.imgur.com/BoN9kdC.png",
+                          height: 60,
+                          width: 60,
+                          fit: BoxFit.cover,
+                        ),
                       ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  Text(
+                    "Welcome Back",
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontSize: 16,
                     ),
-                    SizedBox(height: 20),
-                    ListView.builder(
-                      key: ValueKey(selectedCategoryLabel),
-                      itemCount: displayedDoctors.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final doc = displayedDoctors[index];
-                        return AppointmentDoctor(
-                          name: doc["name"],
-                          subtitle: doc["sub"],
-                          rating: doc["rating"].toDouble(),
-                          image: doc["image"],
+                  ),
+                  const SizedBox(height: 5),
+
+                  const Text(
+                    "Let's find your\ntop doctor!",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      height: 1.3,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: TextEditingField(
+                      title: "",
+                      hintText: "Search health issue...",
+                      icon: const Icon(Icons.search),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Categories',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: LightTheme.titleColors,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5, bottom: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(categories.length, (index) {
+                        final category = categories[index];
+                        return CategoryItem(
+                          icon: category["icon"],
+                          label: category["label"],
+                          iconColor: category["iconColor"],
+                          backgroundColor: category["backgroundColor"],
+                          isSelected: _selectedCategoryIndex == index,
+                          onTap: () {
+                            setState(() {
+                              _selectedCategoryIndex = index;
+                            });
+                          },
                         );
-                      },
+                      }),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 20),
+                  ListView.builder(
+                    key: ValueKey(selectedCategoryLabel),
+                    itemCount: displayedDoctors.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final doc = displayedDoctors[index];
+                      return AppointmentDoctor(
+                        name: doc["name"],
+                        subtitle: doc["sub"],
+                        rating: doc["rating"].toDouble(),
+                        image: doc["image"],
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
