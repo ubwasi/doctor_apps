@@ -1,3 +1,4 @@
+import 'package:doctor_apps/Screen/SuccessDiolog.dart';
 import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:doctor_apps/Widget/StatItem.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +31,16 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
-    _dates = List.generate(daysInMonth, (index) => firstDayOfMonth.add(Duration(days: index)));
-    final todayIndex = _dates.indexWhere((date) =>
-    date.year == now.year && date.month == now.month && date.day == now.day);
+    _dates = List.generate(
+      daysInMonth,
+      (index) => firstDayOfMonth.add(Duration(days: index)),
+    );
+    final todayIndex = _dates.indexWhere(
+      (date) =>
+          date.year == now.year &&
+          date.month == now.month &&
+          date.day == now.day,
+    );
     if (todayIndex != -1) {
       _selectedDateIndex = todayIndex;
     }
@@ -74,20 +82,23 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
   void _handleBookAppointment() {
     if (_selectedDateIndex == -1) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please select a date.")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please select a date.")));
       return;
     }
     final selectedDate = _dates[_selectedDateIndex];
+    final appointmentDate = "${_getWeekday(selectedDate)} ${selectedDate.day} ${_getMonthName(selectedDate)}";
+    final appointmentTime = _timeSlots[_selectedTimeIndex];
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Confirm Appointment"),
         content: Text(
           "Booking with ${widget.name}\n"
-          "Date: ${_getWeekday(selectedDate)} ${selectedDate.day} ${_getMonthName(selectedDate)}\n"
-          "Time: ${_timeSlots[_selectedTimeIndex]}",
+          "Date: $appointmentDate\n"
+          "Time: $appointmentTime",
         ),
         actions: [
           TextButton(
@@ -96,10 +107,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Appointment Booked Successfully!"),
+              Navigator.pop(context); // Close the confirmation dialog
+              showDialog(
+                context: context,
+                builder: (context) => SuccessDiolog(
+                  doctorName: widget.name,
+                  appointmentDate: appointmentDate,
+                  appointmentTime: appointmentTime,
                 ),
               );
             },
@@ -155,7 +169,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           ),
                           child: CircleAvatar(
                             radius: 45,
-                            backgroundImage: NetworkImage(widget.image), 
+                            backgroundImage: NetworkImage(widget.image),
                           ),
                         ),
                         Positioned(
