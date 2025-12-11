@@ -107,7 +107,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context); // Close the confirmation dialog
+              Navigator.pop(context);
               showDialog(
                 context: context,
                 builder: (context) => SuccessDiolog(
