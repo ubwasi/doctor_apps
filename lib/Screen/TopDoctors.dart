@@ -147,11 +147,14 @@ class _TopDoctorsState extends State<TopDoctors> {
                 itemCount: displayedDoctors.length,
                 itemBuilder: (context, index) {
                   final doc = displayedDoctors[index];
-                  return AppointmentDoctor(
-                    name: doc["name"],
-                    subtitle: doc["sub"],
-                    rating: doc["rating"].toDouble(),
-                    image: doc["image"],
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: AppointmentDoctor(
+                      name: doc["name"],
+                      subtitle: doc["sub"],
+                      rating: doc["rating"].toDouble(),
+                      image: doc["image"],
+                    ),
                   );
                 },
               ),
