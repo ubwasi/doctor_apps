@@ -20,41 +20,56 @@ class _BottomNavBarState extends State<BottomNavBar> {
     TopDoctors(),
     ProfileScreen()
   ];
+
+
+  Future<bool> _onWillPop() async {
+    if (currentIndex != 0) {
+      setState(() {
+        currentIndex = 0;
+      });
+      return false;
+    }
+    return true; 
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
-        children: pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        currentIndex: currentIndex,
-        selectedItemColor:LightTheme.primaryColors,
-        backgroundColor: LightTheme.backgroundColors,
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: ""
-
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.date_range),
-            label: ""
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: ""
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: IndexedStack(
+          index: currentIndex,
+          children: pages,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          currentIndex: currentIndex,
+          selectedItemColor:LightTheme.primaryColors,
+          backgroundColor: LightTheme.backgroundColors,
+          unselectedItemColor: Colors.grey,
+          onTap: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+      
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: ""
+      
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.date_range),
+              label: ""
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: ""
+            ),
+          ],
+        ),
       ),
     );
   }
