@@ -2,6 +2,7 @@ import 'package:doctor_apps/Screen/AppointmentScreen.dart';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:doctor_apps/Screen/Profile.dart';
 import 'package:doctor_apps/Screen/TopDoctors.dart';
+import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -27,8 +28,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
         children: pages,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         currentIndex: currentIndex,
-        selectedItemColor: Colors.orange,
+        selectedItemColor:LightTheme.primaryColors,
+        backgroundColor: LightTheme.backgroundColors,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
           setState(() {
@@ -39,15 +43,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: "Home",
+            label: ""
+
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: "Search",
+            icon: Icon(Icons.date_range),
+            label: ""
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: "Profile",
+            label: ""
           ),
         ],
       ),
