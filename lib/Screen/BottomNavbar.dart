@@ -1,4 +1,3 @@
-import 'package:doctor_apps/Screen/AppointmentScreen.dart';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:doctor_apps/Screen/Profile.dart';
 import 'package:doctor_apps/Screen/TopDoctors.dart';
