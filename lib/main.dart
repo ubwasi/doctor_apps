@@ -4,6 +4,8 @@ import 'package:doctor_apps/Screen/TopDoctors.dart';
 import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/material.dart';
 
+import 'Auth/Screen/LogInScreen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: LightTheme.theme,
-      home: BottomNavBar(),
+      home: LogInScreen(),
     );
   }
 }
