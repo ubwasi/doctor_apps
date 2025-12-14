@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../Screen/BottomNavbar.dart';
 import '../../domain/requests/auth_requests.dart';
 import '../../Theme/Theme.dart';
 import '../../Widget/TextEdtingField.dart';
@@ -28,7 +29,7 @@ class _LogInScreenState extends State<LogInScreen> {
       await sharedPrefs.setString('user', jsonEncode(res['user']));
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const BottomNavBar()),
       );
       ScaffoldMessenger.of(
         context,
