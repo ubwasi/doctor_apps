@@ -1,11 +1,25 @@
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
-
+import '../../domain/requests/auth_requests.dart';
 import '../../Theme/Theme.dart';
 import '../../Widget/TextEdtingField.dart';
 
-class LogInScreen extends StatelessWidget {
+class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
+
+  @override
+  State<LogInScreen> createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void onLogin() async{
+    var email = emailController.text;
+    var password = passwordController.text;
+    await login(email, password);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +66,7 @@ class LogInScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    );
-                  },
+                  onPressed: onLogin,
                   style: ElevatedButton.styleFrom(
                       backgroundColor: LightTheme.primaryColors,
                       padding: const EdgeInsets.symmetric(vertical: 15),
