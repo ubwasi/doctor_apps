@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/requests/auth_requests.dart';
 import '../../Theme/Theme.dart';
 import '../../Widget/TextEdtingField.dart';
@@ -15,10 +18,30 @@ class _LogInScreenState extends State<LogInScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void onLogin() async{
+  void onLogin() async {
     var email = emailController.text;
     var password = passwordController.text;
-    await login(email, password);
+    var res = await login(email, password);
+    if (res['success']) {
+      final sharedPrefs = await SharedPreferences.getInstance();
+      await sharedPrefs.setString('authToken', res['token']);
+      await sharedPrefs.setString('user', jsonEncode(res['user']));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login Successful!')));
+    } else if (res['message'] != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(res['message'])));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login Failed!')));
+    }
   }
 
   @override
@@ -43,12 +66,14 @@ class _LogInScreenState extends State<LogInScreen> {
               TextEditingField(
                 title: 'Email',
                 hintText: 'Enter your email',
+                controller: emailController,
                 icon: const Icon(Icons.email_outlined),
               ),
               const SizedBox(height: 20),
               TextEditingField(
                 title: 'Password',
                 hintText: 'Enter your password',
+                controller: passwordController,
                 icon: const Icon(Icons.lock_outline),
               ),
               const SizedBox(height: 10),
@@ -68,11 +93,12 @@ class _LogInScreenState extends State<LogInScreen> {
                 child: ElevatedButton(
                   onPressed: onLogin,
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: LightTheme.primaryColors,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      )),
+                    backgroundColor: LightTheme.primaryColors,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                   child: const Text(
                     "Login",
                     style: TextStyle(
@@ -92,11 +118,14 @@ class _LogInScreenState extends State<LogInScreen> {
                     onPressed: () {},
                     child: const Text(
                       "Sign Up",
-                      style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
