@@ -2,11 +2,11 @@ import 'package:doctor_apps/Screen/BottomNavbar.dart';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:doctor_apps/Screen/TopDoctors.dart';
 import 'package:doctor_apps/Theme/Theme.dart';
+import 'package:doctor_apps/providers/app_router.dart';
 import 'package:flutter/material.dart';
 
 import 'Auth/Screen/LogInScreen.dart';
 import 'Auth/Screen/RegScreen.dart';
-import 'Screen/Profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,12 +14,9 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: LightTheme.theme,
-      home: const ProfileScreen(),
-    );
+    return MaterialApp.router(routerConfig: AppRouter);
   }
 }
