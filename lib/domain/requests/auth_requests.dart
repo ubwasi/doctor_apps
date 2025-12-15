@@ -48,13 +48,18 @@ Future<Map<String, dynamic>> login(String email, String password) async {
       }),
     );
 
+    final responseData = json.decode(response.body);
+
     if (response.statusCode == 200) {
-      return {'success': true, 'data': json.decode(response.body)};
+      return {
+        'success': true,
+        'data': responseData['data'],
+        'message': responseData['message'],
+      };
     } else {
-      final errorData = json.decode(response.body);
       return {
         'success': false,
-        'message': errorData['message'] ?? 'Login failed. Please try again.',
+        'message': responseData['message'] ?? 'Login failed. Please try again.',
       };
     }
   } catch (e) {

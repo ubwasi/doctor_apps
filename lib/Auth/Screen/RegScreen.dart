@@ -1,7 +1,9 @@
 import 'package:doctor_apps/Auth/Screen/LogInScreen.dart';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Screen/BottomNavbar.dart';
 import '../../Theme/Theme.dart';
 import '../../Widget/TextEdtingField.dart';
 import '../../domain/requests/auth_requests.dart';
@@ -42,9 +44,11 @@ class _RegScreenState extends State<RegScreen> {
         });
 
         if (result['success']) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('hasRegistered', true);
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (_) => BottomNavBar()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

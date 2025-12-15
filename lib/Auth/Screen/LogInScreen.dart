@@ -1,5 +1,6 @@
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Screen/BottomNavbar.dart';
 import '../../Theme/Theme.dart';
@@ -36,10 +37,13 @@ class _LogInScreenState extends State<LogInScreen> {
         });
 
         if (result['success']) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const BottomNavBar()),
-          );
+          final prefs = await SharedPreferences.getInstance();
+
+          await prefs.setString('authToken', result['data']['token']);
+          print('Saved token: ${prefs.getString('authToken')}');
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+            return BottomNavBar();
+          },));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

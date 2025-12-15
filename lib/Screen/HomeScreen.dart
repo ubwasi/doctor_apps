@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   loadUserData() async {
     final sharedPrefs = await SharedPreferences.getInstance();
-    var userData = await sharedPrefs.getString('user');
+    var userData = await sharedPrefs.getString('data');
     var user = jsonDecode(userData ?? '{}') as Map;
     setState(() {
       _user = user;
