@@ -1,17 +1,53 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Theme/Theme.dart';
 import '../Widget/ProfileMenu.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  Map _user = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    var userData = sharedPrefs.getString('data');
+    if (userData != null && mounted) {
+      setState(() {
+        _user = jsonDecode(userData);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final user = _user['data']?['user'];
+    final name = user?['name'] ?? "User";
+    final email = user?['email'] ?? "user@example.com";
+    final phone = user?['phone'] ?? "";
+    final imageFromApi = user?['image'];
+    final imageUrl = (imageFromApi != null && imageFromApi.isNotEmpty)
+        ? imageFromApi
+        : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500";
+
+
     return Scaffold(
       body:
         SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(top:70),
+            margin: const EdgeInsets.only(top:70),
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
@@ -22,9 +58,12 @@ class ProfileScreen extends StatelessWidget {
                       height: 120,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: const Image(
-                          image: NetworkImage(
-                            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500",
+                        child: Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => const Image(
+                            image: NetworkImage("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500"),
+                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -49,11 +88,18 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Text("John Doe", style: Theme.of(context).textTheme.headlineMedium),
+                Text(name, style: Theme.of(context).textTheme.headlineMedium),
                 Text(
-                  "john.doe@example.com",
+                  email,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
+                if (phone.isNotEmpty) ...[
+                  const SizedBox(height: 5),
+                  Text(
+                    phone,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
                 const SizedBox(height: 20),
 
                 SizedBox(
