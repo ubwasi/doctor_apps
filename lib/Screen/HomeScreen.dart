@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            _user['data']?['user']?['image'] ?? "https://i.imgur.com/BoN9kdC.png",
+                            _user['data']?['user']?['image'] ?? "assets/Images/add_17644526.gif",
                             height: 60,
                             width: 60,
                             fit: BoxFit.cover,
