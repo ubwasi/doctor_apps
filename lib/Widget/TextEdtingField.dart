@@ -2,23 +2,29 @@ import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/material.dart';
 
 class TextEditingField extends StatelessWidget {
-  String title;
-  String hintText;
-  TextEditingController? controller;
-  Icon icon;
+  final String title;
+  final String hintText;
+  final Icon icon;
+  final TextEditingController? controller;
+  final bool obscureText;
+  final FormFieldValidator<String>? validator;
 
-  TextEditingField({
+  const TextEditingField({
     super.key,
     required this.title,
-    this.controller,
     required this.icon,
     required this.hintText,
+    this.controller,
+    this.obscureText = false,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      obscureText: obscureText,
+      validator: validator,
       decoration: InputDecoration(
         fillColor: LightTheme.backgroundColors,
         filled: true,
@@ -27,12 +33,12 @@ class TextEditingField extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
         ),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: Colors.red, width: 1),
           borderRadius: BorderRadius.circular(14),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: LightTheme.primaryColors, width: 2),
         ),
         labelText: title,
         hintText: hintText,

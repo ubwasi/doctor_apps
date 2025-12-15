@@ -5,6 +5,7 @@ import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/material.dart';
 
 import 'Auth/Screen/LogInScreen.dart';
+import 'Auth/Screen/RegScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: LightTheme.theme,
-      home: LogInScreen(),
+      home: RegScreen(),
     );
   }
 }
