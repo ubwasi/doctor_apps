@@ -28,7 +28,8 @@ Future<Map<String, dynamic>> register(
       final errorData = json.decode(response.body);
       return {
         'success': false,
-        'message': errorData['message'] ?? 'Registration failed. Please try again.',
+        'message':
+            errorData['message'] ?? 'Registration failed. Please try again.',
       };
     }
   } catch (e) {
@@ -42,10 +43,7 @@ Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'email': email,
-        'password': password,
-      }),
+      body: json.encode({'email': email, 'password': password}),
     );
 
     final responseData = json.decode(response.body);
@@ -53,7 +51,8 @@ Future<Map<String, dynamic>> login(String email, String password) async {
     if (response.statusCode == 200) {
       return {
         'success': true,
-        'data': responseData['data'],
+        'data': responseData['data']['user'],
+        'token': responseData['data']['token'],
         'message': responseData['message'],
       };
     } else {

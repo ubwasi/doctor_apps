@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:doctor_apps/Auth/Screen/RegScreen.dart';
-import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Theme/Theme.dart';
@@ -41,11 +41,9 @@ class _LogInScreenState extends State<LogInScreen> {
         if (result['success']) {
           final sharedPrefs = await SharedPreferences.getInstance();
           await sharedPrefs.setString('data', json.encode(result['data']));
+          await sharedPrefs.setString('token', json.encode(result['token']));
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
+          context.go('/');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

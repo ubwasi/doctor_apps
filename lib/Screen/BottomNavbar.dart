@@ -3,23 +3,31 @@ import 'package:doctor_apps/Screen/Profile.dart';
 import 'package:doctor_apps/Screen/TopDoctors.dart';
 import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
+  final int currentIndex;
+
+  const BottomNavBar({super.key, this.currentIndex = 0});
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+  late int currentIndex;
 
-  int currentIndex = 0;
-  final List<Widget> pages = [
-    HomeScreen(),
-    TopDoctors(),
-    ProfileScreen()
-  ];
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      currentIndex = widget.currentIndex;
+    });
+  }
 
+  final List<Widget> pages = [HomeScreen(), TopDoctors(), ProfileScreen()];
+
+  final List<String> paths = ['/', '/top-doctors', '/profile'];
 
   Future<bool> _onWillPop() async {
     if (currentIndex != 0) {
@@ -28,7 +36,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       });
       return false;
     }
-    return true; 
+    return true;
   }
 
   @override
@@ -36,37 +44,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        body: IndexedStack(
-          index: currentIndex,
-          children: pages,
-        ),
+        body: IndexedStack(index: currentIndex, children: pages),
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,
           currentIndex: currentIndex,
-          selectedItemColor:LightTheme.primaryColors,
+          selectedItemColor: LightTheme.primaryColors,
           backgroundColor: LightTheme.backgroundColors,
           unselectedItemColor: Colors.grey,
           onTap: (index) {
             setState(() {
               currentIndex = index;
             });
+            context.go(paths[index]);
           },
-      
+
           items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: ""
-      
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.date_range),
-              label: ""
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: ""
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.date_range), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
           ],
         ),
       ),
