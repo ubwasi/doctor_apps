@@ -5,6 +5,7 @@ import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Screen/BottomNavbar.dart';
 import '../../Theme/Theme.dart';
 import '../../Widget/TextEdtingField.dart';
 import '../../domain/requests/auth_requests.dart';
@@ -44,7 +45,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => const BottomNavBar()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
