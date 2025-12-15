@@ -17,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedCategoryIndex = 0;
   List<Map<String, dynamic>> doctors = [];
-  late Map _user;
+  Map _user = {};
 
   final List<Map<String, dynamic>> categories = [
     {
@@ -46,13 +46,14 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  loadUserData() async {
+  Future<void> loadUserData() async {
     final sharedPrefs = await SharedPreferences.getInstance();
-    var userData = await sharedPrefs.getString('user');
-    var user = jsonDecode(userData ?? '{}') as Map;
-    setState(() {
-      _user = user;
-    });
+    var userData = sharedPrefs.getString('data');
+    if (userData != null) {
+      setState(() {
+        _user = jsonDecode(userData);
+      });
+    }
   }
 
   @override
@@ -120,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            _user['image'] ?? "https://i.imgur.com/BoN9kdC.png",
+                            _user['data']?['user']?['image'] ?? "https://i.imgur.com/BoN9kdC.png",
                             height: 60,
                             width: 60,
                             fit: BoxFit.cover,
@@ -132,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 25),
 
                     Text(
-                      "Welcome Back ${_user['name']}",
+                      "Welcome Back, ${_user['data']?['user']?['name'] ?? "User"}!",
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.9),
                         fontSize: 16,
@@ -141,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 5),
 
                     const Text(
-                      "Let's find your\ntop doctor!",
+                      "Let's find your top doctor",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,

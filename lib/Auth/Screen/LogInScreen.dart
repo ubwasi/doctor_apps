@@ -1,7 +1,10 @@
+import 'dart:convert';
+
+import 'package:doctor_apps/Auth/Screen/RegScreen.dart';
 import 'package:doctor_apps/Screen/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../Screen/BottomNavbar.dart';
 import '../../Theme/Theme.dart';
 import '../../Widget/TextEdtingField.dart';
 import '../../domain/requests/auth_requests.dart';
@@ -36,9 +39,12 @@ class _LogInScreenState extends State<LogInScreen> {
         });
 
         if (result['success']) {
+          final sharedPrefs = await SharedPreferences.getInstance();
+          await sharedPrefs.setString('data', json.encode(result['data']));
+
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const BottomNavBar()),
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -144,6 +150,10 @@ class _LogInScreenState extends State<LogInScreen> {
                     const Text("Don't have an account?"),
                     TextButton(
                       onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const RegScreen()),
+                        );
                       },
                       child: const Text(
                         "Sign Up",
