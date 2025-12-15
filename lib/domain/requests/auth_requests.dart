@@ -4,8 +4,9 @@ import 'package:http/http.dart' as http;
 Future<Map<String, dynamic>> register(
   String name,
   String email,
+  String phone,
   String password,
-  String confirmPassword,
+  String passwordConfirmation,
 ) async {
   final url = Uri.parse('https://doctor.sohojware.dev/api/v1/auth/register');
   try {
@@ -15,7 +16,9 @@ Future<Map<String, dynamic>> register(
       body: json.encode({
         'name': name,
         'email': email,
+        'phone': phone,
         'password': password,
+        'password_confirmation': passwordConfirmation,
       }),
     );
 
