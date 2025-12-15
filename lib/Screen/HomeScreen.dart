@@ -120,12 +120,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            _user['data']?['user']?['image'] ?? "assets/Images/add_17644526.gif",
-                            height: 60,
-                            width: 60,
-                            fit: BoxFit.cover,
-                          ),
+                          child: _user['data']?['user']?['image'] != null
+                              ? Image.network(
+                                  _user['data']?['user']?['image'] ??
+                                      "https://cdn2.suno.ai/12e0a3d6-9154-4b5e-9b44-75e01826b8a1_4964085d.jpeg",
+                                  height: 60,
+                                  width: 60,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  "assets/Images/wp5168678-mia-khalifa-hd-photography-wallpapers.jpg",
+                                  height: 60,
+                                  width: 60,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ],
                     ),
