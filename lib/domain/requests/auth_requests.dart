@@ -5,6 +5,7 @@ Future<Map<String, dynamic>> register(
   String name,
   String email,
   String password,
+  String confirmPassword,
 ) async {
   final url = Uri.parse('https://doctor.sohojware.dev/api/v1/auth/register');
   try {

@@ -31,6 +31,7 @@ class _RegScreenState extends State<RegScreen> {
         _nameController.text,
         _emailController.text,
         _passwordController.text,
+        _confirmPasswordController.text
       );
 
       if (mounted) {
@@ -41,7 +42,7 @@ class _RegScreenState extends State<RegScreen> {
         if (result['success']) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => const LogInScreen()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
