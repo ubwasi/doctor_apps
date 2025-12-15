@@ -17,6 +17,7 @@ class _RegScreenState extends State<RegScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
@@ -30,7 +31,9 @@ class _RegScreenState extends State<RegScreen> {
       final result = await register(
         _nameController.text,
         _emailController.text,
+        _phoneController.text,
         _passwordController.text,
+        _confirmPasswordController.text,
       );
 
       if (mounted) {
@@ -100,6 +103,19 @@ class _RegScreenState extends State<RegScreen> {
                     }
                     if (!value.contains('@')) {
                       return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                TextEditingField(
+                  controller: _phoneController,
+                  title: 'Phone Number',
+                  hintText: 'Enter your phone number',
+                  icon: const Icon(Icons.phone_outlined),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your phone number';
                     }
                     return null;
                   },
