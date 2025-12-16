@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Theme/Theme.dart';
 import '../Widget/ProfileMenu.dart';
+import 'ProfileEditingScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -112,7 +113,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               width: 200,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileEditingScreen()));
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: LightTheme.primaryColors,
                   shape: const StadiumBorder(),

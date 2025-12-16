@@ -92,9 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .toList();
     }
 
-    final user = _user.containsKey('user') ? _user['user'] : null;
-    final userName = user?['name'] ?? 'User';
-    final userImage = user?['image'];
+    final userName = _user['name'] ?? 'User';
+    final userImage = _user['image'];
     final imageUrl = (userImage != null && userImage.isNotEmpty)
         ? userImage
         : "https://i.imgur.com/BoN9kdC.png";
