@@ -92,6 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
           .toList();
     }
 
+    final user = _user.containsKey('user') ? _user['user'] : null;
+    final userName = user?['name'] ?? 'User';
+    final userImage = user?['image'];
+    final imageUrl = (userImage != null && userImage.isNotEmpty)
+        ? userImage
+        : "https://i.imgur.com/BoN9kdC.png";
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -121,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            _user['data']?['user']?['image'] ?? "assets/Images/add_17644526.gif",
+                            imageUrl,
                             height: 60,
                             width: 60,
                             fit: BoxFit.cover,
@@ -133,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 25),
 
                     Text(
-                      "Welcome Back, ${_user['data']?['user']?['name'] ?? "User"}!",
+                      "Welcome Back, $userName!",
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.9),
                         fontSize: 16,
