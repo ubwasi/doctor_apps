@@ -33,7 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = _user['data']?['user'];
+    final data = _user.containsKey('data') ? _user['data'] as Map<String, dynamic>? : null;
+    final user = data != null && data.containsKey('user') ? data['user'] as Map<String, dynamic>? : null;
+    
     final name = user?['name'] ?? "User";
     final email = user?['email'] ?? "user@example.com";
     final phone = user?['phone'] ?? "";
@@ -41,13 +43,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final imageUrl = (imageFromApi != null && imageFromApi.isNotEmpty)
         ? imageFromApi
         : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500";
-
+    
+    final healthInfo = user?['health_info'] as Map<String, dynamic>?;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+        centerTitle: true,
+      ),
       body:
         SingleChildScrollView(
           child: Container(
-            margin: const EdgeInsets.only(top:70),
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
@@ -120,25 +126,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 30),
                 const Divider(),
                 const SizedBox(height: 10),
+                
+                // Personal Info
+                _buildInfoSection(
+                  title: 'Personal Information',
+                  icon: Icons.person,
+                  info: {
+                    'Date of Birth': user?['date_of_birth'],
+                    'Age': user?['age'],
+                    'Gender': user?['gender_label'],
+                    'Blood Group': user?['blood_group'],
+                  }
+                ),
 
-                ProfileMenu(
-                  title: "Settings",
-                  icon: Icons.settings,
-                  onPress: () {},
+                // Contact Info
+                _buildInfoSection(
+                  title: 'Contact Information',
+                  icon: Icons.contact_mail,
+                  info: {
+                    'Address': user?['address'],
+                    'City': user?['city'],
+                    'District': user?['district'],
+                    'Postal Code': user?['postal_code'],
+                    'Emergency Contact': user?['emergency_contact'],
+                  }
                 ),
-                ProfileMenu(
-                  title: "Billing Details",
-                  icon: Icons.wallet,
-                  onPress: () {},
+
+                // Health Info
+                if (healthInfo != null)
+                  _buildInfoSection(
+                    title: 'Health Information',
+                    icon: Icons.medical_services,
+                    info: {
+                      'Allergies': healthInfo['allergies'],
+                      'Chronic Conditions': healthInfo['chronic_conditions'],
+                      'Current Medications': healthInfo['current_medications'],
+                      'Height': healthInfo['height'],
+                      'Weight': healthInfo['weight'],
+                      'BMI': healthInfo['bmi'],
+                    }
+                  ),
+                
+                // Account Info
+                _buildInfoSection(
+                  title: 'Account Information',
+                  icon: Icons.security,
+                  info: {
+                    'Email Verified': user?['email_verified']?.toString(),
+                    'Member Since': user?['created_at'],
+                  }
                 ),
-                ProfileMenu(
-                  title: "User Management",
-                  icon: Icons.person_add,
-                  onPress: () {},
-                ),
+
                 const Divider(),
                 const SizedBox(height: 10),
-                ProfileMenu(title: "Information", icon: Icons.info, onPress: () {}),
                 ProfileMenu(
                   title: "Logout",
                   icon: Icons.logout,
@@ -150,6 +190,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         )
+    );
+  }
+
+  Widget _buildInfoSection({required String title, required IconData icon, required Map<String, dynamic> info}) {
+    return ExpansionTile(
+      leading: Icon(icon),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+      children: info.entries.map((entry) {
+        return ListTile(
+          title: Text(entry.key),
+          trailing: Text(entry.value?.toString() ?? 'N/A', textAlign: TextAlign.right),
+        );
+      }).toList(),
     );
   }
 }
