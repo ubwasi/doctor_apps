@@ -1,9 +1,6 @@
 import 'package:doctor_apps/Auth/Screen/LogInScreen.dart';
 import 'package:doctor_apps/Auth/Screen/RegScreen.dart';
 import 'package:doctor_apps/Screen/BottomNavbar.dart';
-import 'package:doctor_apps/Screen/HomeScreen.dart';
-import 'package:doctor_apps/Screen/Profile.dart';
-import 'package:doctor_apps/Screen/TopDoctors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';

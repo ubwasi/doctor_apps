@@ -1,13 +1,5 @@
-import 'package:doctor_apps/Screen/BottomNavbar.dart';
-import 'package:doctor_apps/Screen/HomeScreen.dart';
-import 'package:doctor_apps/Screen/TopDoctors.dart';
-import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:doctor_apps/providers/app_router.dart';
 import 'package:flutter/material.dart';
-
-import 'Auth/Screen/LogInScreen.dart';
-import 'Auth/Screen/RegScreen.dart';
-
 void main() {
   runApp(const MyApp());
 }
