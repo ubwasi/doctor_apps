@@ -72,6 +72,21 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                             const SizedBox(height: 8),
                             Text(
                               _doctorDetails!['about'] ?? 'No information available.',
+                              maxLines: 5,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.grey[700], height: 1.5),
+                            ),
+                            Text(
+                              'Email:  ${_doctorDetails!['email'] ?? 'No information available.'}',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.grey[700], height: 1.5),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildSectionTitle(context, 'Qualification'),
+                            const SizedBox(height: 8),
+                            Text(
+                              _doctorDetails!['qualification'] ?? 'No information available.',
+                              maxLines: 5,
+                              overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.grey[700], height: 1.5),
                             ),
                             const SizedBox(height: 24),
