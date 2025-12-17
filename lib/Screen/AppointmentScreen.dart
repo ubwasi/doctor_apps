@@ -88,6 +88,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     final doctor = widget.doctor;
 
     return Scaffold(
+      backgroundColor: LightTheme.backgroundColors,
       appBar: AppBar(
         title: const Text("Appointment"),
         backgroundColor: Colors.white,
