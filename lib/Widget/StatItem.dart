@@ -3,22 +3,25 @@ import 'package:flutter/material.dart';
 class StatItem extends StatelessWidget {
   final String count;
   final String label;
+  final double countFontSize;
+  final double labelFontSize;
 
   const StatItem({
     super.key,
     required this.count,
     required this.label,
+    this.countFontSize = 15,
+    this.labelFontSize = 12,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 95,
-      height: 90,
+      width: 100,
+      height: 100,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        // Optional: Add shadow for better visibility on white backgrounds
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -35,7 +38,6 @@ class StatItem extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              // Replaced LightTheme.primaryColors with Theme.of(context).primaryColor
               color: Theme.of(context).primaryColor.withOpacity(0.8),
             ),
           ),
@@ -44,7 +46,6 @@ class StatItem extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 12,
-              // Replaced LightTheme.subTitleColors with standard grey
               color: Colors.grey[600],
             ),
           ),
