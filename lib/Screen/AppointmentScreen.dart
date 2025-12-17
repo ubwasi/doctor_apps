@@ -132,9 +132,12 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   StatItem(
                       count: "${doctor['experience']}+",
                       label: "Experience"),
+                  const SizedBox(width: 10,),
                   StatItem(
                       count: doctor['rating_formatted'],
                       label: "Rating"),
+                  const SizedBox(width: 10,),
+
                   StatItem(
                       count: doctor['fees_formatted'],
                       label: "Fees"),
