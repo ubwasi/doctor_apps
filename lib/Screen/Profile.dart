@@ -67,7 +67,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Profile Image
             Stack(
               children: [
                 SizedBox(
