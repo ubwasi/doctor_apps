@@ -29,7 +29,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (userData != null) {
       _user = jsonDecode(userData);
     }
-
     if (mounted) {
       setState(() {
         _isLoading = false;
