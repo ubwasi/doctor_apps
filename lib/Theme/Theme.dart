@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-class LightTheme{
+
+class LightTheme {
+  // Light Theme Colors
   static final backgroundColors = Color(0xFFFFFFFF);
   static final primaryColors = Color(0xFFA884FF);
   static final titleColors = Color(0xFF26364D);
@@ -16,6 +18,7 @@ class LightTheme{
   );
 
   static final ThemeData theme = ThemeData(
+    brightness: Brightness.light,
     fontFamily: 'Lato',
     primaryColor: primaryColors,
     scaffoldBackgroundColor: backgroundColors,
@@ -28,6 +31,24 @@ class LightTheme{
       titleLarge: TextStyle(color: titleColors, fontFamily: 'Lato'),
       bodyLarge: TextStyle(color: subTitleColors, fontFamily: 'Lato'),
       bodyMedium: TextStyle(color: subTitleColors, fontFamily: 'Lato'),
+    ),
+  );
+
+  // Dark Theme
+  static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    fontFamily: 'Lato',
+    primaryColor: primaryColors,
+    scaffoldBackgroundColor: const Color(0xFF121212),
+    textTheme: TextTheme(
+      displayLarge: TextStyle(color: Colors.white, fontFamily: 'Lato'),
+      displayMedium: TextStyle(color: Colors.white, fontFamily: 'Lato'),
+      displaySmall: TextStyle(color: Colors.white, fontFamily: 'Lato'),
+      headlineMedium: TextStyle(color: Colors.white, fontFamily: 'Lato'),
+      headlineSmall: TextStyle(color: Colors.white, fontFamily: 'Lato'),
+      titleLarge: TextStyle(color: Colors.white, fontFamily: 'Lato'),
+      bodyLarge: TextStyle(color: Colors.white70, fontFamily: 'Lato'),
+      bodyMedium: TextStyle(color: Colors.white70, fontFamily: 'Lato'),
     ),
   );
 }

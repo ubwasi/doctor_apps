@@ -9,13 +9,15 @@ import '../Widget/CategoryItem.dart';
 import '../domain/requests/doctor_requests.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final ValueChanged<bool>? onThemeChanged;
+  const HomeScreen({super.key, this.onThemeChanged});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isDarkMode = false;
   int _selectedCategoryIndex = 0;
   List<Map<String, dynamic>> doctors = [];
   List<Map<String, dynamic>> categories = [];
@@ -27,6 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _loadDoctors();
     _loadUserData();
+
+    final brightness = WidgetsBinding.instance.window.platformBrightness;
+    isDarkMode = brightness == Brightness.dark;
   }
 
   Future<void> _loadUserData() async {
@@ -160,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }).toList();
 
     return Scaffold(
+      drawer: _drawer(),
       body: SafeArea(
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -177,10 +183,113 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _drawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              gradient: LightTheme.linnerColors,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(
+                    _user['image'] ??
+                        'https://cdn2.suno.ai/12e0a3d6-9154-4b5e-9b44-75e01826b8a1_4964085d.jpeg',
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  _user['name'] ?? 'User',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  _user['email'] ?? '',
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home_outlined),
+            title: const Text('Home'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
+            title: const Text('Dark Mode'),
+            trailing: Switch(
+              value: isDarkMode,
+              onChanged: (val) {
+                setState(() {
+                  isDarkMode = val;
+                });
+                if (widget.onThemeChanged != null) {
+                  widget.onThemeChanged!(val);
+                }
+              },
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: const Text('Privacy Policy'),
+            onTap: () {
+              Navigator.pop(context);
+              _openPrivacyPolicy();
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () {
+              // Handle logout
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openPrivacyPolicy() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Privacy Policy'),
+          content: const SingleChildScrollView(
+            child: Text(
+              'Your privacy is important. We do not share personal data with third parties...',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _header() {
-    final userImage =
-        _user['image'] ??
-            'https://cdn2.suno.ai/12e0a3d6-9154-4b5e-9b44-75e01826b8a1_4964085d.jpeg';
+    final userImage = _user['image'] ??
+        'https://cdn2.suno.ai/12e0a3d6-9154-4b5e-9b44-75e01826b8a1_4964085d.jpeg';
     final userName = _user['name'] ?? 'User';
 
     return Container(
@@ -195,10 +304,19 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                Icons.menu_rounded,
-                color: LightTheme.backgroundColors,
-                size: 35,
+              Builder(
+                builder: (context) {
+                  return IconButton(
+                    icon: Icon(
+                      Icons.menu_rounded,
+                      color: LightTheme.backgroundColors,
+                      size: 35,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  );
+                },
               ),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -211,6 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+          const SizedBox(height: 10),
           Text(
             "Welcome Back, $userName",
             style: const TextStyle(color: Colors.white),
