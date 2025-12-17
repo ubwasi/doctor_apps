@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     final imageUrl = (imageFromApi != null && imageFromApi.toString().isNotEmpty)
         ? imageFromApi
-        : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500';
+        : 'https://cdn2.suno.ai/12e0a3d6-9154-4b5e-9b44-75e01826b8a1_4964085d.jpeg';
 
     final healthInfo = user['health_info'] as Map<String, dynamic>?;
 
