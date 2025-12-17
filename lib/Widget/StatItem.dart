@@ -16,12 +16,12 @@ class StatItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    final countFontSize = screenWidth * 0.05;
-    final labelFontSize = screenWidth * 0.035;
+    final countFontSize = screenWidth * 0.04;
+    final labelFontSize = screenWidth * 0.03;
 
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal:14 ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
