@@ -229,7 +229,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               ? LightTheme.primaryColors
                               : Colors.white,
                           borderRadius:
-                          BorderRadius.circular(12),
+                          BorderRadius.circular(20),
                         ),
                         child: Text(
                           _timeSlots[i],
@@ -247,26 +247,39 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           ],
         ),
       ),
-      bottomSheet: Padding(
+      bottomSheet: Container(
+        color: Colors.white,
         padding: const EdgeInsets.all(24),
-        child: SizedBox(
-          width: double.infinity,
-          height: 56,
-          child: ElevatedButton(
-            onPressed: _bookAppointment,
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-              LightTheme.primaryColors,
+        child: GestureDetector(
+          onTap: _bookAppointment,
+          child: Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              color: LightTheme.primaryColors,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            child: const Text(
-              "Book Appointment",
-              style: TextStyle(
+            child: const Center(
+              child: Text(
+                "Book Appointment",
+                style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
             ),
           ),
         ),
       ),
+
     );
   }
 }
