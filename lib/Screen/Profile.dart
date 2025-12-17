@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Theme/Theme.dart';
 import '../Widget/ProfileMenu.dart';
+import 'ProfileEditingScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -53,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     final imageUrl = (imageFromApi != null && imageFromApi.toString().isNotEmpty)
         ? imageFromApi
-        : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500';
+        : 'https://cdn2.suno.ai/12e0a3d6-9154-4b5e-9b44-75e01826b8a1_4964085d.jpeg';
 
     final healthInfo = user['health_info'] as Map<String, dynamic>?;
 
@@ -111,7 +112,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               width: 200,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileEditingScreen()));
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: LightTheme.primaryColors,
                   shape: const StadiumBorder(),

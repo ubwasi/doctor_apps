@@ -150,10 +150,8 @@ class _TopDoctorsState extends State<TopDoctors> {
                   return Padding(
                     padding: const EdgeInsets.all(10),
                     child: AppointmentDoctor(
-                      name: doc["name"],
-                      subtitle: doc["sub"],
-                      rating: doc["rating"].toDouble(),
-                      image: doc["image"],
+                      doctor: doc,
+
                     ),
                   );
                 },

@@ -1,30 +1,24 @@
-import 'package:doctor_apps/Screen/AppointmentScreen.dart';
-import 'package:doctor_apps/Theme/Theme.dart';
 import 'package:flutter/material.dart';
+import '../Theme/Theme.dart';
+import '../Screen/AppointmentScreen.dart';
 
 class AppointmentDoctor extends StatelessWidget {
-  final String name;
-  final String subtitle;
-  final double rating;
-  final String image;
+  final Map<String, dynamic> doctor;
 
   const AppointmentDoctor({
     super.key,
-    required this.name,
-    required this.subtitle,
-    required this.rating,
-    required this.image,
+    required this.doctor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      padding: EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -34,76 +28,72 @@ class AppointmentDoctor extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              image: DecorationImage(
-                image: NetworkImage(image),
-                fit: BoxFit.cover,
-              ),
+          CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(
+              doctor['image'] ??
+                  "https://i.imgur.com/BoN9kdC.png",
             ),
           ),
-
-          SizedBox(width: 15),
-
+          const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  doctor['name'] ?? '',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: LightTheme.titleColors,
                   ),
                 ),
-
                 Text(
-                  subtitle,
-                  style: TextStyle(fontSize: 12, color: LightTheme.subTitleColors),
+                  doctor['specialty']?['name'] ?? 'General',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: LightTheme.subTitleColors,
+                  ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(Icons.star, size: 16, color: Colors.green),
-                    SizedBox(width: 4),
+                    const Icon(Icons.star,
+                        size: 16, color: Colors.green),
+                    const SizedBox(width: 4),
                     Text(
-                      "$rating",
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                      doctor['rating_formatted'] ?? "0",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
-                    return AppointmentScreen(
-                      name: name,
-                      subtitle: subtitle,
-                      image: image,
-                    );
-                  },
+                  builder: (_) => AppointmentScreen(
+                    doctor: doctor,
+                  ),
                 ),
               );
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 15, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
+              child: const Text(
                 "Appointment",
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600),
               ),
             ),
           ),
