@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:doctor_apps/Auth/Screen/RegScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../Theme/Theme.dart';
 import '../../Widget/TextEdtingField.dart';
 import '../../domain/requests/auth_requests.dart';
