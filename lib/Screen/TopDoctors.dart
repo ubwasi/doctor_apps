@@ -38,7 +38,7 @@ class _TopDoctorsState extends State<TopDoctors> {
           "icon": Icons.verified_rounded,
           "iconColor": const Color(0xFF6CE9A6),
           "backgroundColor": const Color(0xFFE8FDF0),
-        }
+        },
       ];
 
       for (var doctor in apiDoctors) {
@@ -135,31 +135,30 @@ class _TopDoctorsState extends State<TopDoctors> {
         : categories[_selectedCategoryIndex]['label'];
 
     final List<Map<String, dynamic>> displayedDoctors =
-    selectedCategory == "All"
+        selectedCategory == "All"
         ? doctors
         : doctors.where((doctor) {
-      final specialty = doctor['specialty']?['name'];
-      return specialty != null &&
-          specialty.toLowerCase() == selectedCategory.toLowerCase();
-    }).toList();
+            final specialty = doctor['specialty']?['name'];
+            return specialty != null &&
+                specialty.toLowerCase() == selectedCategory.toLowerCase();
+          }).toList();
 
     return Scaffold(
       body: SafeArea(
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SingleChildScrollView(
-
-                scrollDirection: Axis.horizontal,
-                child: _categories(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: _categories(),
+                    ),
+                    _doctorList(displayedDoctors),
+                  ],
+                ),
               ),
-              _doctorList(displayedDoctors),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -170,22 +169,25 @@ class _TopDoctorsState extends State<TopDoctors> {
       child: categories.isEmpty
           ? const SizedBox()
           : Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(categories.length, (index) {
-          return CategoryItem(
-            icon: categories[index]['icon'],
-            label: categories[index]['label'],
-            iconColor: categories[index]['iconColor'],
-            backgroundColor: categories[index]['backgroundColor'],
-            isSelected: _selectedCategoryIndex == index,
-            onTap: () {
-              setState(() {
-                _selectedCategoryIndex = index;
-              });
-            },
-          );
-        }),
-      ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(categories.length, (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: CategoryItem(
+                    icon: categories[index]['icon'],
+                    label: categories[index]['label'],
+                    iconColor: categories[index]['iconColor'],
+                    backgroundColor: categories[index]['backgroundColor'],
+                    isSelected: _selectedCategoryIndex == index,
+                    onTap: () {
+                      setState(() {
+                        _selectedCategoryIndex = index;
+                      });
+                    },
+                  ),
+                );
+              }),
+            ),
     );
   }
 
@@ -198,9 +200,7 @@ class _TopDoctorsState extends State<TopDoctors> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           final doc = doctors[index];
-          return AppointmentDoctor(
-            doctor: doc,
-          );
+          return AppointmentDoctor(doctor: doc);
         },
       ),
     );
