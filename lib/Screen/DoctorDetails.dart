@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../Theme/Theme.dart';
+import 'AppointmentScreen.dart';
 
 class DoctorDetails extends StatefulWidget {
   final Map<String, dynamic> doctor;
@@ -263,8 +264,14 @@ class _DoctorDetailsState extends State<DoctorDetails> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         ),
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Booking functionality not implemented yet.')),
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AppointmentScreen(
+                doctor: _doctorDetails!,
+              ),
+            ),
           );
         },
         child: const Text(
