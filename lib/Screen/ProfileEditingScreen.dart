@@ -18,7 +18,6 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
-  // Personal and Contact Info
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -29,7 +28,6 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
   final _postalCodeController = TextEditingController();
   final _emergencyContactController = TextEditingController();
 
-  // Health Info
   final _allergiesController = TextEditingController();
   final _chronicConditionsController = TextEditingController();
   final _currentMedicationsController = TextEditingController();
@@ -48,6 +46,7 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
 
     if (userData != null) {
       _user = jsonDecode(userData);
+      _loadUserData0();
     }
 
     if (mounted) {
@@ -79,7 +78,7 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
 
   Future<void> _loadUserData0() async {
     final sharedPrefs = await SharedPreferences.getInstance();
-    var userString = sharedPrefs.getString('user');
+    var userString = sharedPrefs.getString('data');
     if (userString != null && mounted) {
       final user = jsonDecode(userString);
       setState(() {
@@ -133,6 +132,7 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
               Text("Personal Information", style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 20),
               TextFormField(
+
                 controller: _nameController,
                 decoration: InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
               ),
