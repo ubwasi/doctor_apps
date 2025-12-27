@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> getDoctors() async {
   final url = Uri.parse(
-    'https://doctor.sohojware.dev/api/v1/doctors?specialty=&location=&search=&per_page=15',
+    'https://clinic.sohojware.dev/api/v1/doctors?specialty=&location=&search=&per_page=15',
   );
 
   try {

@@ -1,19 +1,26 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+const String _baseUrl = 'https://clinic.sohojware.dev/api/v1/auth';
+
+
 Future<Map<String, dynamic>> register(
-  String name,
-  String email,
-  String phone,
-  String password,
-  String passwordConfirmation,
-) async {
-  final url = Uri.parse('https://doctor.sohojware.dev/api/v1/auth/register');
+    String name,
+    String email,
+    String phone,
+    String password,
+    String passwordConfirmation,
+    ) async {
+  final url = Uri.parse('$_baseUrl/register');
+
   try {
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
         'name': name,
         'email': email,
         'phone': phone,
@@ -22,46 +29,71 @@ Future<Map<String, dynamic>> register(
       }),
     );
 
+    final responseBody = jsonDecode(response.body);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return {'success': true, 'data': json.decode(response.body)};
-    } else {
-      final errorData = json.decode(response.body);
       return {
-        'success': false,
-        'message':
-            errorData['message'] ?? 'Registration failed. Please try again.',
+        'success': true,
+        'data': responseBody['data'],
+        'message': responseBody['message'],
       };
     }
+
+    return {
+      'success': false,
+      'message':
+      responseBody['message'] ?? 'Registration failed. Please try again.',
+    };
   } catch (e) {
-    return {'success': false, 'message': 'An unexpected error occurred: $e'};
+    return {
+      'success': false,
+      'message': 'Unexpected error: $e',
+    };
   }
 }
 
-Future<Map<String, dynamic>> login(String email, String password) async {
-  final url = Uri.parse('https://doctor.sohojware.dev/api/v1/auth/login');
+
+Future<Map<String, dynamic>> login(
+    String email,
+    String password,
+    ) async {
+  final url = Uri.parse('$_baseUrl/login');
+
   try {
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email, 'password': password}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
     );
 
-    final responseData = json.decode(response.body);
+    final responseBody = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && responseBody['success'] == true) {
       return {
         'success': true,
-        'data': responseData['data']['user'],
-        'token': responseData['data']['token'],
-        'message': responseData['message'],
-      };
-    } else {
-      return {
-        'success': false,
-        'message': responseData['message'] ?? 'Login failed. Please try again.',
+        'data': {
+          'user': responseBody['data']['user'],
+          'token': responseBody['data']['token'],
+        },
+        'message': responseBody['message'],
       };
     }
+
+    return {
+      'success': false,
+      'message':
+      responseBody['message'] ?? 'Login failed. Please try again.',
+    };
   } catch (e) {
-    return {'success': false, 'message': 'An unexpected error occurred: $e'};
+    return {
+      'success': false,
+      'message': 'Unexpected error: $e',
+    };
   }
 }
