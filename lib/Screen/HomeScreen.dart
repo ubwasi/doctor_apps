@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Theme/Theme.dart';
 import '../Widget/TextEdtingField.dart';
 import '../Widget/AppointmentDoctor.dart';
-import '../Widget/CategoryItem.dart';
 import '../domain/requests/doctor_requests.dart';
 
 class HomeScreen extends StatefulWidget {

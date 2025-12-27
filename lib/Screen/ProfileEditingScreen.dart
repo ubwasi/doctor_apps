@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../domain/requests/auth_requests.dart';
+
 class ProfileEditingScreen extends StatefulWidget {
   const ProfileEditingScreen({super.key});
 
@@ -10,13 +12,10 @@ class ProfileEditingScreen extends StatefulWidget {
 }
 
 class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
-
-  Map<String, dynamic> _user = {};
-
-
-
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+
+  Map<String, dynamic> _user = {};
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -24,9 +23,6 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
   final _dobController = TextEditingController();
   final _addressController = TextEditingController();
   final _cityController = TextEditingController();
-  final _districtController = TextEditingController();
-  final _postalCodeController = TextEditingController();
-  final _emergencyContactController = TextEditingController();
 
   final _allergiesController = TextEditingController();
   final _chronicConditionsController = TextEditingController();
@@ -37,25 +33,79 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
   @override
   void initState() {
     super.initState();
-    _loadUserData();
+    _loadUser();
   }
 
-  Future<void> _loadUserData() async {
+  Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
-    final userData = prefs.getString('data');
+    final userString = prefs.getString('user');
 
-    if (userData != null) {
-      _user = jsonDecode(userData);
-      _loadUserData0();
+    if (userString != null) {
+      _user = jsonDecode(userString);
+
+      final health = _user['health_info'] ?? {};
+
+      _nameController.text = _user['name'] ?? '';
+      _emailController.text = _user['email'] ?? '';
+      _phoneController.text = _user['phone'] ?? '';
+      _dobController.text = _user['date_of_birth'] ?? '';
+      _addressController.text = _user['address'] ?? '';
+      _cityController.text = _user['city'] ?? '';
+
+      _allergiesController.text = health['allergies'] ?? '';
+      _chronicConditionsController.text = health['chronic_conditions'] ?? '';
+      _currentMedicationsController.text = health['current_medications'] ?? '';
+      _heightController.text = health['height']?.toString() ?? '';
+      _weightController.text = health['weight']?.toString() ?? '';
     }
 
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    if (mounted) setState(() {});
   }
 
+  double _calculateBMI(double heightCm, double weightKg) {
+    final heightM = heightCm / 100;
+    return weightKg / (heightM * heightM);
+  }
+
+  Future<void> _saveProfile() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    final height = double.tryParse(_heightController.text);
+    final weight = double.tryParse(_weightController.text);
+    final bmi =
+    (height != null && weight != null) ? _calculateBMI(height, weight) : null;
+
+    final result = await updateProfile(
+      _nameController.text.trim(),
+      _emailController.text.trim(),
+      _phoneController.text.trim(),
+      _dobController.text.trim(),
+      _user['gender'] ?? '',
+      _user['blood_group'] ?? '',
+      height?.toString() ?? '',
+      weight?.toString() ?? '',
+      bmi?.toStringAsFixed(2) ?? '',
+      _addressController.text.trim(),
+      _cityController.text.trim(),
+    );
+
+    setState(() => _isLoading = false);
+
+    if (!mounted) return;
+
+    if (result['success'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile updated successfully')),
+      );
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message'])),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -65,9 +115,6 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
     _dobController.dispose();
     _addressController.dispose();
     _cityController.dispose();
-    _districtController.dispose();
-    _postalCodeController.dispose();
-    _emergencyContactController.dispose();
     _allergiesController.dispose();
     _chronicConditionsController.dispose();
     _currentMedicationsController.dispose();
@@ -76,50 +123,21 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
     super.dispose();
   }
 
-  Future<void> _loadUserData0() async {
-    final sharedPrefs = await SharedPreferences.getInstance();
-    var userString = sharedPrefs.getString('data');
-    if (userString != null && mounted) {
-      final user = jsonDecode(userString);
-      setState(() {
-        _nameController.text = user['name'] ?? '';
-        _emailController.text = user['email'] ?? '';
-        _phoneController.text = user['phone'] ?? '';
-        _dobController.text = user['date_of_birth'] ?? '';
-        _addressController.text = user['address'] ?? '';
-        _cityController.text = user['city'] ?? '';
-        _districtController.text = user['district'] ?? '';
-        _postalCodeController.text = user['postal_code'] ?? '';
-        _emergencyContactController.text = user['emergency_contact'] ?? '';
-
-        final healthInfo = user['health_info'] as Map<String, dynamic>?;
-        if (healthInfo != null) {
-          _allergiesController.text = healthInfo['allergies'] ?? '';
-          _chronicConditionsController.text = healthInfo['chronic_conditions'] ?? '';
-          _currentMedicationsController.text = healthInfo['current_medications'] ?? '';
-          _heightController.text = healthInfo['height']?.toString() ?? '';
-          _weightController.text = healthInfo['weight']?.toString() ?? '';
-        }
-      });
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: const Text('Edit Profile'),
         actions: [
           _isLoading
-              ? Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: CircularProgressIndicator(color: Colors.white),
-                )
+              ? const Padding(
+            padding: EdgeInsets.all(12),
+            child: CircularProgressIndicator(color: Colors.white),
+          )
               : IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.save),
-                ),
+            icon: const Icon(Icons.save),
+            onPressed: _saveProfile,
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -129,94 +147,48 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Personal Information", style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 20),
-              TextFormField(
+              _section('Personal Information'),
+              _field(_nameController, 'Name'),
+              _field(_emailController, 'Email'),
+              _field(_phoneController, 'Phone'),
+              _field(_dobController, 'Date of Birth'),
 
-                controller: _nameController,
-                decoration: InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _phoneController,
-                decoration: InputDecoration(labelText: 'Phone', border: OutlineInputBorder()),
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _dobController,
-                decoration: InputDecoration(labelText: 'Date of Birth', border: OutlineInputBorder()),
-                keyboardType: TextInputType.datetime,
-              ),
-              const SizedBox(height: 30),
+              _section('Contact Information'),
+              _field(_addressController, 'Address'),
+              _field(_cityController, 'City'),
 
-              Text("Contact Information", style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(labelText: 'Address', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _cityController,
-                decoration: InputDecoration(labelText: 'City', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _districtController,
-                decoration: InputDecoration(labelText: 'District', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _postalCodeController,
-                decoration: InputDecoration(labelText: 'Postal Code', border: OutlineInputBorder()),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _emergencyContactController,
-                decoration: InputDecoration(labelText: 'Emergency Contact', border: OutlineInputBorder()),
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: 30),
-
-              Text("Health Information", style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _allergiesController,
-                decoration: InputDecoration(labelText: 'Allergies', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _chronicConditionsController,
-                decoration: InputDecoration(labelText: 'Chronic Conditions', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _currentMedicationsController,
-                decoration: InputDecoration(labelText: 'Current Medications', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _heightController,
-                decoration: InputDecoration(labelText: 'Height (cm)', border: OutlineInputBorder()),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _weightController,
-                decoration: InputDecoration(labelText: 'Weight (kg)', border: OutlineInputBorder()),
-                keyboardType: TextInputType.number,
-              ),
+              _section('Health Information'),
+              _field(_allergiesController, 'Allergies'),
+              _field(_chronicConditionsController, 'Chronic Conditions'),
+              _field(_currentMedicationsController, 'Current Medications'),
+              _field(_heightController, 'Height (cm)', isNumber: true),
+              _field(_weightController, 'Weight (kg)', isNumber: true),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _section(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 10),
+      child: Text(title, style: Theme.of(context).textTheme.titleLarge),
+    );
+  }
+
+  Widget _field(
+      TextEditingController controller,
+      String label, {
+        bool isNumber = false,
+      }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+        decoration:
+        InputDecoration(labelText: label, border: const OutlineInputBorder()),
       ),
     );
   }
