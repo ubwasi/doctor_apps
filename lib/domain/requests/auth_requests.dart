@@ -154,10 +154,11 @@ Future<Map<String, dynamic>> updateProfile({
         'height': height,
         'weight': weight,
         'bmi': bmi,
-      }
+      },
+      '_method': 'PUT',
     });
 
-    final response = await http.put(
+    final response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
@@ -189,8 +190,7 @@ Future<Map<String, dynamic>> updateProfile({
     }
   } catch (e) {
     return {
-      'success': false,
-      'message': 'Unexpected error: $e',
+      'success': false, 'message': 'Unexpected error: $e',
     };
   }
 }

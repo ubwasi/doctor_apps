@@ -148,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               info: {
                 'Date of Birth': user['date_of_birth'],
                 'Age': user['age'],
-                'Gender': user['gender_label'],
+                'Gender': user['gender'],
                 'Blood Group': user['blood_group'],
               },
             ),
