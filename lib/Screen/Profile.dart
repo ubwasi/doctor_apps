@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Theme/Theme.dart';
 import '../Widget/ProfileMenu.dart';
 import 'ProfileEditingScreen.dart';
@@ -21,6 +20,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _loadUserData();
+    _reloadUser();
+  }
+
+  Future<void> _reloadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userData = prefs.getString('data');
+
+    if (userData != null && mounted) {
+      setState(() {
+        _user = jsonDecode(userData);
+      });
+    }
   }
 
   Future<void> _loadUserData() async {
@@ -111,8 +122,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               width: 200,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileEditingScreen()));
+                onPressed: () async {
+                  final updated = await Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileEditingScreen()));
+                  if (updated == true) {
+                    _reloadUser();
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: LightTheme.primaryColors,

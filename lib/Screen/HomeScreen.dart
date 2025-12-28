@@ -26,6 +26,19 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _loadUser();
     _loadDoctors();
+    _reloadUser();
+  }
+
+
+  Future<void> _reloadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userData = prefs.getString('data');
+
+    if (userData != null && mounted) {
+      setState(() {
+        _user = jsonDecode(userData);
+      });
+    }
   }
 
   Future<void> _loadUser() async {

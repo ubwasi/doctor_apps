@@ -76,6 +76,9 @@ Future<Map<String, dynamic>> login(
     final responseBody = jsonDecode(response.body);
 
     if (response.statusCode == 200 && responseBody['success'] == true) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user', jsonEncode(responseBody['data']['user']));
+      await prefs.setString('token', responseBody['data']['token']);
       return {
         'success': true,
         'data': {
@@ -99,19 +102,26 @@ Future<Map<String, dynamic>> login(
   }
 }
 
-Future<Map<String, dynamic>> updateProfile(
-    String name,
-    String email,
-    String phone,
-    String dateOfBirth,
-    String gender,
-    String bloodGroup,
-    String height,
-    String weight,
-    String bmi,
-    String address,
-    String city,
-    ) async {
+
+Future<Map<String, dynamic>> updateProfile({
+  required String name,
+  required String email,
+  required String phone,
+  String? dateOfBirth,
+  String? gender,
+  String? district,
+  String? city,
+  String? postalCode,
+  String? emergencyContact,
+  String? allergies,
+  String? chronicConditions,
+  String? currentMedications,
+  String? bloodGroup,
+  String? height,
+  String? weight,
+  String? address,
+  String? bmi,
+}) async {
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
 
@@ -125,6 +135,28 @@ Future<Map<String, dynamic>> updateProfile(
   final url = Uri.parse('$_baseUrl/profile');
 
   try {
+    final body = jsonEncode({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'date_of_birth': dateOfBirth,
+      'gender': gender,
+      'blood_group': bloodGroup,
+      'address': address,
+      'city': city,
+      'district': district,
+      'postal_code': postalCode,
+      'emergency_contact': emergencyContact,
+      'health_info': {
+        'allergies': allergies,
+        'chronic_conditions': chronicConditions,
+        'current_medications': currentMedications,
+        'height': height,
+        'weight': weight,
+        'bmi': bmi,
+      }
+    });
+
     final response = await http.put(
       url,
       headers: {
@@ -132,26 +164,13 @@ Future<Map<String, dynamic>> updateProfile(
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode({
-        'name': name,
-        'email': email,
-        'phone': phone,
-        'date_of_birth': dateOfBirth,
-        'gender': gender,
-        'blood_group': bloodGroup,
-        'address': address,
-        'city': city,
-        'health_info': {
-          'height': height,
-          'weight': weight,
-          'bmi': bmi,
-        }
-      }),
+      body: body,
     );
 
     final responseBody = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
       await prefs.setString(
         'user',
         jsonEncode(responseBody['data']['user']),
@@ -160,15 +179,14 @@ Future<Map<String, dynamic>> updateProfile(
       return {
         'success': true,
         'data': responseBody['data']['user'],
-        'message': responseBody['message'],
+        'message': responseBody['message'] ?? 'Profile updated successfully',
+      };
+    } else {
+      return {
+        'success': false,
+        'message': responseBody['message'] ?? 'Update profile failed. Try again.',
       };
     }
-
-    return {
-      'success': false,
-      'message':
-      responseBody['message'] ?? 'Update profile failed. Try again.',
-    };
   } catch (e) {
     return {
       'success': false,

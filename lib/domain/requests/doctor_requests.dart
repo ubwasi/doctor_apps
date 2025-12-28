@@ -38,7 +38,7 @@ Future<Map<String, dynamic>> getDoctors() async {
 }
 
 Future<Map<String, dynamic>> getDoctorDetails(int doctorId) async {
-  final url = Uri.parse('https://doctor.sohojware.dev/api/v1/doctors/$doctorId');
+  final url = Uri.parse('https://clinic.sohojware.dev/api/v1/doctors/$doctorId');
 
   try {
     final response = await http.get(url).timeout(
